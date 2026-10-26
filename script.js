@@ -60,10 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.typing-text').appendChild(cursorSpan);
 
     const rolesList = [
-        "Data Scientist",
-        "Machine Learning Engineer",
+        "Python Developer",
         "AI Engineer",
-        "Data Analyst"
+        "Machine Learning Engineer",
+        "Generative AI Developer"
     ];
 
     const typingDelay = 100;
@@ -194,3 +194,56 @@ window.addEventListener('scroll', () => {
         }
     });
 });
+
+// Video Modal Functionality
+const watchDemoBtn = document.getElementById('watch-demo-btn');
+const videoModal = document.getElementById('video-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const videoModalBackdrop = document.getElementById('video-modal-backdrop');
+const demoVideo = document.getElementById('demo-video');
+
+if (watchDemoBtn && videoModal && demoVideo) {
+    const openModal = () => {
+        // Preload video on demand if not already loaded
+        if (demoVideo.readyState === 0) {
+            demoVideo.load();
+        }
+        videoModal.classList.add('active');
+        // Play the video automatically when modal opens
+        demoVideo.play().catch(error => {
+            console.log("Autoplay blocked by browser. User must click play.", error);
+        });
+        
+        // Hide custom cursor elements when modal is active
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        if (cursorDot) cursorDot.style.opacity = '0';
+        if (cursorOutline) cursorOutline.style.opacity = '0';
+    };
+
+    const closeModal = () => {
+        videoModal.classList.remove('active');
+        // Pause the video and reset it
+        demoVideo.pause();
+        
+        // Restore custom cursor elements
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        if (cursorDot) cursorDot.style.opacity = '1';
+        if (cursorOutline) cursorOutline.style.opacity = '1';
+    };
+
+    // Open modal on button click
+    watchDemoBtn.addEventListener('click', openModal);
+
+    // Close modal on click of close button or backdrop click
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    if (videoModalBackdrop) videoModalBackdrop.addEventListener('click', closeModal);
+
+    // Close modal with Escape key
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+}
